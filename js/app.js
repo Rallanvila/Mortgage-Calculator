@@ -59,7 +59,7 @@ let myChart = new Chart(ctx, {
     },
 });
 myChart.options.animation = false;
-//adding event listeners to inputs
+//adding event listeners to input to update state
 let updateInputsState = (event) =>{
     let name = event.target.name;
     let value = event.target.value;
@@ -75,24 +75,26 @@ let updateInputsState = (event) =>{
     }
     calculateDate()
 }
-
+//loop through input text
 let i;
 let inputText = document.getElementsByClassName('form-group__textInput');
 for (i = 0; i < inputText.length; i++){
     inputText[i].addEventListener('input', updateInputsState)
 }
+//loop through input ranges
 let inputSlides = document.getElementsByClassName('form-group__range-slide');
 for (i = 0; i < inputSlides.length; i++){
     inputSlides[i].addEventListener('input', updateInputsState)
 }
 
-
 document.getElementsByTagName('form')[0].addEventListener('submit', (event) =>{
+    //keep from submitting form causing refresh 
     event.preventDefault();
+    //when hitting Let's go pull up doughnut and calc data
     document.getElementsByClassName('mg-page__right')[0].classList.add('mg-page__right--animate');
     calculateDate();
 })
-
+//The math to calculate the data
 function calculateDate(){
     totalLoan = state.price - state.price * (state.down_payment / 100);
     totalMonths = state.loan_years * 12;
@@ -120,7 +122,7 @@ function calculateDate(){
         document.getElementsByClassName('info__numbers--total')[0].innerHTML = `$${monthlyTotal.toFixed(2)}`;
         updateChart(myChart, labels, backgroundColor)
 }
-
+//update the chart with all the data and calc whenever a change is made. 
 let updateChart = (chart, label, color) => {
     chart.data.datasets.pop();
     chart.data.datasets.push({
