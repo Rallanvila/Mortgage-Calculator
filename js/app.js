@@ -20,6 +20,7 @@ monthlyPrincipleInterest,
 monthlyPropertyTaxes,
 monthlyHomeInsurance,
 monthlyHOA,
+monthlyTotal,
 labels = ["Principal & Interest", "Property Tax", "Home Insurance", "HOA"],
 backgroundColor= [
     'rgba(255, 99, 132, 1)',
@@ -65,11 +66,14 @@ let updateInputsState = (event) =>{
     if (name == 'price'){
         value = getNumber(value);
     }
+    if(event.target.type == 'range'){
+        let total = (document.getElementsByClassName(`total__${name}`))[0].innerHTML = `${value}`
+    }
     state = {
         ...state, 
         [name]: value
     }
-    console.log(state)
+    calculateDate()
 }
 
 let i;
@@ -77,4 +81,36 @@ let inputText = document.getElementsByClassName('form-group__textInput');
 for (i = 0; i < inputText.length; i++){
     inputText[i].addEventListener('input', updateInputsState)
 }
+let inputSlides = document.getElementsByClassName('form-group__range-slide');
+for (i = 0; i < inputSlides.length; i++){
+    inputSlides[i].addEventListener('input', updateInputsState)
+}
 
+
+document.getElementsByTagName('form')[0].addEventListener('submit', (event) =>{
+    event.preventDefault();
+    document.getElementsByClassName('mg-page__right')[0].classList.add('mg-page__right--animate');
+    calculateDate();
+})
+
+function calculateDate(){
+    totalLoan = state.price - state.price * (state.down_payment / 100);
+    totalMonths = state.loan_years * 12;
+    monthlyInterest = state.interest_rate / 100 / 12;
+    monthlyPrincipleInterest = (
+        totalLoan * 
+        ((monthlyInterest * (1 + monthlyInterest) ** totalMonths) /
+        ((1+ monthlyInterest) ** totalMonths -1)
+        )
+    ).toFixed(2);
+    monthlyPropertyTaxes = (
+        (state.price * (state.property_tax / 100))
+        / 12
+    ).toFixed(2);
+    monthlyHomeInsurance = state.home_insurance / 12;
+    monthlyHOA = state.hoa / 12;
+    monthlyTotal = 
+        parseFloat(monthlyPrincipleInterest) + 
+        parseFloat(monthlyPropertyTaxes) + parseFloat(monthlyHomeInsurance) + parseFloat(monthlyHOA);
+        console.log(monthlyTotal)
+}
