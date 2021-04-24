@@ -113,4 +113,9 @@ function calculateDate(){
         parseFloat(monthlyPrincipleInterest) + 
         parseFloat(monthlyPropertyTaxes) + parseFloat(monthlyHomeInsurance) + parseFloat(monthlyHOA);
         console.log(monthlyTotal)
+        document.getElementsByClassName('info__numbers--principal')[0].innerHTML = parseFloat(monthlyPrincipleInterest).toFixed(2);
+        document.getElementsByClassName('info__numbers--property_taxes')[0].innerHTML = parseFloat(monthlyPropertyTaxes).toFixed(2);
+        document.getElementsByClassName('info__numbers--home_insurance')[0].innerHTML = parseFloat(monthlyHomeInsurance).toFixed(2);
+        document.getElementsByClassName('info__numbers--hoa')[0].innerHTML = parseFloat(monthlyHOA).toFixed(2);
+        document.getElementsByClassName('info__numbers--total')[0].innerHTML = `$${monthlyTotal.toFixed(2)}`;
 }
