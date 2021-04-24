@@ -118,4 +118,22 @@ function calculateDate(){
         document.getElementsByClassName('info__numbers--home_insurance')[0].innerHTML = parseFloat(monthlyHomeInsurance).toFixed(2);
         document.getElementsByClassName('info__numbers--hoa')[0].innerHTML = parseFloat(monthlyHOA).toFixed(2);
         document.getElementsByClassName('info__numbers--total')[0].innerHTML = `$${monthlyTotal.toFixed(2)}`;
+        updateChart(myChart, labels, backgroundColor)
 }
+
+let updateChart = (chart, label, color) => {
+    chart.data.datasets.pop();
+    chart.data.datasets.push({
+        label: label,
+        backgroundColor: color,
+        data: [
+            monthlyPrincipleInterest,
+            monthlyPropertyTaxes,
+            monthlyHomeInsurance,
+            monthlyHOA
+        ]
+    });
+    chart.options.transitions.active.animation.duration = 0;
+    chart.update();
+}
+calculateDate();
